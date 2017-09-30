@@ -26,7 +26,7 @@ public class Clipboard extends CordovaPlugin {
         String text = args.getString(0);
         String mime = "text/plain";
 
-        if(args.size() > 1) {
+        if(args.length() > 1) {
           mime = args.getString(1);
         }
 
