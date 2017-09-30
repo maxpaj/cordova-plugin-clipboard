@@ -24,12 +24,28 @@ public class Clipboard extends CordovaPlugin {
     if (action.equals(actionCopy)) {
       try {
         String text = args.getString(0);
-        ClipData clip = ClipData.newPlainText("Text", text);
+        String mime = "text/plain";
 
-        clipboard.setPrimaryClip(clip);
+        if(args.size() > 1) {
+          mime = args.getString(1);
+        }
 
+        ClipData clip = null;
+
+        switch(mime) {
+          case "text/html":
+            clip = ClipData.newHtmlText("HTML", text, text);
+            clipboard.setPrimaryClip(clip);
+            System.out.println("copied HTML " + text);
+            break;
+          case "text/plain":
+          default:
+            clip = ClipData.newPlainText("Text", text);
+            clipboard.setPrimaryClip(clip);
+            System.out.println("copied text " + text);
+            break;
+        }
         callbackContext.success(text);
-
         return true;
       } catch (JSONException e) {
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION));
